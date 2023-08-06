@@ -135,9 +135,7 @@ const Home: NextPage = () => {
                 style={{ width: 300, height: 300 }}
               />
             )}
-<p className={`${styles.centeredText}`}>
-  Embark on a thrilling treasure hunt across Long Island's finest breweries. This digital treasure map will lead you on a quest, offering tantalizing beer flights as a reward and <span className={styles.boldText}>unforgettable memories as the treasure's sweet bounty!</span>
-</p>
+<p className={`${styles.centeredText}`}>Step into the world of the Punk Groupies, where electrifying chords and rebellious spirit unite, forging a community of like-minded souls who march to the beat of their own drums. Being a Punk Groupie means immersing yourself in a culture that celebrates individuality, raw energy, and the power of punk music to ignite a fire within, sparking a revolution of self-expression and unapologetic authenticity. </p>
 <p className={`${styles.limitText}`}>LIMITED TO ONE PURCHASE PER EMAIL ADDRESS</p>
             <p>Price: 150$</p>
           </div>
