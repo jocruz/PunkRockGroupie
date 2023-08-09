@@ -135,7 +135,7 @@ const Home: NextPage = () => {
                 style={{ width: 300, height: 300 }}
               />
             )}
-<p className={`${styles.centeredText}`}>Step into the world of the Rock Groupies, where electrifying riffs and soul-stirring melodies converge, creating a tight-knit community of passionate souls who live and breathe the essence of rock music. Being a Rock Groupie means immersing yourself in a culture that celebrates the timeless allure of guitars, powerful vocals, and the profound impact of rock in shaping generations. Join us on a musical journey that transcends boundaries, unleashing the sheer energy and emotion that only rock can deliver, uniting hearts and spirits in an unbreakable bond of rock 'n' roll camaraderie.</p>
+<p className={`${styles.centeredText}`}>Step into the world of the Punk Groupies, where electrifying chords and rebellious spirit unite, forging a community of like-minded souls who march to the beat of their own drums. Being a Punk Groupie means immersing yourself in a culture that celebrates individuality, raw energy, and the power of punk music to ignite a fire within, sparking a revolution of self-expression and unapologetic authenticity. </p>
 <p className={`${styles.limitText}`}>LIMITED TO ONE PURCHASE PER EMAIL ADDRESS</p>
             <p>Price: 50&cent;</p>
           </div>
@@ -147,7 +147,7 @@ const Home: NextPage = () => {
         </>
       ) : (
         <>
-          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Reggae Groupie</h2>
+          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Punk Rock Groupie</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
