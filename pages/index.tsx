@@ -154,7 +154,7 @@ const Home: NextPage = () => {
         </>
       ) : (
         <>
-          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Rock Groupie</h2>
+          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Punk Groupie</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
