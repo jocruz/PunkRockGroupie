@@ -17,11 +17,12 @@ import type { NextPage } from "next";
 import Form from "../components/Form";
 import { EDITION_ADDRESS } from "../constants/addresses";
 import styles from "../styles/Home.module.css";
+import { magicLink } from "@thirdweb-dev/react";
+import { useConnect } from "@thirdweb-dev/react";
 // import TermsAndConditions from "../components/TermsAndConditions";
 
 const Home: NextPage = () => {
   const address = useAddress();
-  const connectWithMagic = useMagic();
   const disconnect = useDisconnect();
   const [email, setEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
@@ -32,6 +33,11 @@ const Home: NextPage = () => {
   const { data: nft, error } = useNFT(contract, 2);
   const [clientSecret, setClientSecret] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const connect = useConnect();
+
+  const magicLinkConfig = magicLink({
+    apiKey:  process.env.NEXT_PUBLIC_MAGIC_LINK_API_KEY as string,
+  });
 
   const stripe = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -51,6 +57,11 @@ const Home: NextPage = () => {
     disconnect();
     localStorage.clear();
   }, []);
+  // useEffect(() => {
+  //   console.log('NFT Data:', nft);
+  //   console.log('Error:', error);
+  //   console.log('Contract address:', contract?.contractWrapper.address);
+  // }, [nft, error]);
 
   useEffect(() => {
     if (address && customerId) {
@@ -84,48 +95,44 @@ const Home: NextPage = () => {
     }
   }, [address, customerId]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (firstName && lastName && phoneNumber && email) {
-      fetch("/api/create_customer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          phoneNumber,
-          email,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.alreadyPurchased) {
-            setMessage("This email has already been used for a successful purchase.");
-          } else {
-            if (data.customerId) {
-              setCustomerId(data.customerId);
-              connectWithMagic({ email });
-            }
-          }
-        })
-        .catch((error) => {
-          console.error("Error creating customer:", error);
+      try {
+        const response = await fetch("/api/create_customer", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          }),
         });
+        
+        const data = await response.json();
+        
+        if (data.alreadyPurchased) {
+          setMessage("This email has already been used for a successful purchase.");
+        } else {
+          if (data.customerId) {
+            setCustomerId(data.customerId);
+            await connect(magicLinkConfig, {email:email});
+            
+          }
+        }
+      } catch (error) {
+        console.error("Error creating customer:", error);
+      }
     }
   };
 
-  // const [showTerms, setShowTerms] = useState(true);
-
-  // const handleAcceptTerms = () => {
-  //   setShowTerms(false);
-  // };
-
   return (
     <div className={styles.container}>
-      {/* {showTerms && <TermsAndConditions onAccept={handleAcceptTerms} />} */}
+
       {message && <h2>{message}</h2>}
-      { address ? (
+      {address ? (
         <>
           <p>You are signed in as: {email}</p>
           <div className={styles.nftCard}>
@@ -135,9 +142,9 @@ const Home: NextPage = () => {
                 style={{ width: 300, height: 300 }}
               />
             )}
-<p className={`${styles.centeredText}`}>Step into the world of the Punk Groupies, where electrifying chords and rebellious spirit unite, forging a community of like-minded souls who march to the beat of their own drums. Being a Punk Groupie means immersing yourself in a culture that celebrates individuality, raw energy, and the power of punk music to ignite a fire within, sparking a revolution of self-expression and unapologetic authenticity. </p>
-<p className={`${styles.limitText}`}>LIMITED TO ONE PURCHASE PER EMAIL ADDRESS</p>
-<p>Price: $150</p>
+            <p className={`${styles.centeredText}`}>Step into the world of the Punk Groupies, where electrifying chords and rebellious spirit unite, forging a community of like-minded souls who march to the beat of their own drums. Being a Punk Groupie means immersing yourself in a culture that celebrates individuality, raw energy, and the power of punk music to ignite a fire within, sparking a revolution of self-expression and unapologetic authenticity. </p>
+            <p className={`${styles.limitText}`}>LIMITED TO ONE PURCHASE PER EMAIL ADDRESS</p>
+            <p>Price: $150</p>
           </div>
           {clientSecret && (
             <Elements options={options} stripe={stripe}>
@@ -147,7 +154,7 @@ const Home: NextPage = () => {
         </>
       ) : (
         <>
-          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Punk Rock Groupie</h2>
+          <h2 style={{ fontSize: "1.6rem", textAlign: "center" }}>Sign Up With Email For The Rock Groupie</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
